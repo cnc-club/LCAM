@@ -17,10 +17,12 @@ chromium-browser --allow-file-access-from-files
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 <script src="scratch.js"></script>
-<div id="scratch">
+<div id="sketch-container">
 </div>
 <script>
-	scratch_start();
+	sketch = new Sketch();
+	s = sketch.create();
+	$("#sketch-container").append(s);
 </script>
 
 
