@@ -1,55 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>three.js webgl - teapot buffer geometry</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				color: #fff;
-				font-family: Monospace;
-				font-size: 13px;
-				text-align: center;
-				font-weight: bold;
-
-				background-color: #000;
-				margin: 0px;
-				overflow: hidden;
-			}
-
-			#info {
-				position: absolute;
-				padding: 10px;
-				width: 100%;
-				text-align: center;
-				color: #fff;
-			}
-
-			a { color: blue; }
-
-		</style>
-	</head>
-	<body>
-		<div id="info">
-		</div>
-
-		<script src="js/three.js/three.min.js"></script>
-
-		<script src="js/three.js/js/controls/OrbitControls.js"></script>
-		<script src="js/three.js/js/controls/OrthographicTrackballControls.js"></script>
-		
-
-		<script src="js/three.js/js/Detector.js"></script>
-
-		<script src='js/three.js/js/libs/dat.gui.min.js'></script>
-
-		<script src='js/three.js/js/geometries/TeapotBufferGeometry.js'></script>
-
-
-		<script src='js/grid.js'></script>
-		<script src='js/lathe.js'></script>
-
-		<script>
+function canvas3d(){
 
 			////////////////////////////////////////////////////////////////////////////////
 			// Utah/Newell Teapot demo
@@ -86,15 +35,14 @@
 			function init() {
 
 				container = $( '#canvas3d' );
-				document.body.appendChild( container );
 
-				var canvasWidth = window.innerWidth;
-				var canvasHeight = window.innerHeight;
+				var canvasWidth = container.innerWidth;
+				var canvasHeight = container.innerHeight;
 
 				// CAMERA
-				width = window.innerWidth;
-				height = window.innerHeight;
-				camera = new THREE.PerspectiveCamera( 10, window.innerWidth / window.innerHeight, 1, 80000 );
+				width = container.innerWidth;
+				height = container.innerHeight;
+				camera = new THREE.PerspectiveCamera( 10, container.innerWidth / container.innerHeight, 1, 80000 );
 
 				camera.position.set( -600, 550, 1300 );
 
@@ -107,14 +55,14 @@
 				// RENDERER
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setClearColor( 0xAAAAAA );
-				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setPixelRatio( container.devicePixelRatio );
 				renderer.setSize( canvasWidth, canvasHeight );
 				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
-				container.appendChild( renderer.domElement );
+				container.append( renderer.domElement );
 
 				// EVENTS
-				window.addEventListener( 'resize', onWindowResize, false );
+				container.addEventListener( 'resize', onWindowResize, false );
 
 				// CONTROLS
 				cameraControls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -186,8 +134,8 @@
 
 			function onWindowResize() {
 
-				var canvasWidth = window.innerWidth;
-				var canvasHeight = window.innerHeight;
+				var canvasWidth = container.innerWidth;
+				var canvasHeight = container.innerHeight;
 
 				renderer.setSize( canvasWidth, canvasHeight );
 
@@ -386,20 +334,19 @@
 				var material = new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.5 ,color: 0xffff00 } );
 				var lathe = new THREE.Mesh( geometry, phongMaterial );
 				scene.add( lathe );
-var axisHelper = new THREE.AxisHelper( 5 );
-scene.add( axisHelper );
+				
+				var axisHelper = new THREE.AxisHelper( 5 );
+				scene.add( axisHelper );
 
-edges = new THREE.EdgesHelper( lathe, 0xaa0000 );
-scene.add( edges );
+				edges = new THREE.EdgesHelper( lathe, 0xaa0000 );
+				scene.add( edges );
 
-var size = 100;
-var step = 1;
+				var size = 100;
+				var step = 1;
 
-var gridHelper = new THREE.GridHelper( size, step, "Y" );
-scene.add( gridHelper );
+				var gridHelper = new THREE.GridHelper( size, step, "Y" );
+				scene.add( gridHelper );
 			}
+			
+}			
 
-		</script>
-
-	</body>
-</html>

@@ -224,7 +224,7 @@ function Sketch(){
 
 	this.draw2d_grid = function(context,w,h,x0,y0,size){
 		
-		canvas = $("#canvas2d")[0];
+		canvas = $("#canvas")[0];
 		context = canvas.getContext("2d");
 		context.beginPath();
 		context.moveTo(x0,0);

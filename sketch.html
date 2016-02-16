@@ -9,10 +9,30 @@
 <script src="js/sketch/arc.js"></script>
 <script src="js/sketch/line.js"></script>
 <script src="js/sketch/sketch.js"></script>
+<script src="js/profile.js"></script>
+
+
+<script src="js/three.js/three.min.js"></script>
+
+<script src="js/three.js/js/controls/OrbitControls.js"></script>
+<script src="js/three.js/js/controls/OrthographicTrackballControls.js"></script>
+
+
+<script src="js/three.js/js/Detector.js"></script>
+
+<script src='js/three.js/js/libs/dat.gui.min.js'></script>
+
+<script src='js/three.js/js/geometries/TeapotBufferGeometry.js'></script>
+
+
+<script src='js/grid.js'></script>
+<script src='js/lathe.js'></script>
 
 
 <div id="sketch-container">
 </div>
+
+
 <script>
 	sketch = new Sketch();
 	s = sketch.create();
@@ -21,18 +41,27 @@
 
 
 
-<canvas id="canvas" width="200" height="200">
+<canvas id="canvas2d" width="200" height="200">
     This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
 
+<div id="canvas3d" width="800" height="600">
+   
+</div>
+
+
 <script>
-canvas = $("#canvas")[0];
+canvas3d();
+
+
+canvas = $("#canvas2d")[0];
 context = canvas.getContext("2d");
 context.beginPath();
 context.arc(95, 85, 40, 0, 2*Math.PI);
 context.closePath();
 context.lineWidth = 2;
 context.stroke();
+
 
 </script>
 
