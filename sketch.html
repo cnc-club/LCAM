@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>Sketcher</title>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<link href="style/sketch.css" rel="stylesheet" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="js/sketch/vector.js"></script>
+<script src="js/sketch/arc.js"></script>
+<script src="js/sketch/line.js"></script>
+<script src="js/sketch/sketch.js"></script>
+
+
+<div id="sketch-container">
+</div>
+<script>
+	sketch = new Sketch();
+	s = sketch.create();
+	$("#sketch-container").append(s);
+</script>
+
+
+
+<canvas id="canvas" width="200" height="200">
+    This text is displayed if your browser does not support HTML5 Canvas.
+</canvas>
+
+<script>
+canvas = $("#canvas")[0];
+context = canvas.getContext("2d");
+context.beginPath();
+context.arc(95, 85, 40, 0, 2*Math.PI);
+context.closePath();
+context.lineWidth = 2;
+context.stroke();
+
+</script>
+
+
+
+
+
+
+</body>
+
+</html>
