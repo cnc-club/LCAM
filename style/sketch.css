@@ -41,3 +41,29 @@
 	width: 40px;
 	text-align:center;
 }
+
+#canvas2d{
+	height: 200px;
+	width: 200px;
+}
+#canvas3d{
+	height: 400px;
+	width: 400px;
+}
+
+
+
+/* ------- Canvas3D------- */
+body .dg.ac,
+#canvas3d .dg.main{float: right;
+	position:absolute;
+	right: 0px;
+	top: 0px;
+}
+.dg.main .close-button{
+	width: 50px !important;
+	overflow: hidden;
+	right: 0px;
+}
+
+#canvas3d{ position: relative; }

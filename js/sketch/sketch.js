@@ -224,8 +224,6 @@ function Sketch(){
 
 	this.draw2d_grid = function(context,w,h,x0,y0,size){
 		
-		canvas = $("#canvas2d")[0];
-		context = canvas.getContext("2d");
 		context.beginPath();
 		context.moveTo(x0,0);
 		context.lineTo(x0,h);
@@ -255,8 +253,11 @@ function Sketch(){
 	}
 
 	this.draw2d = function (){
-		w = $("#canvas").width();
-		h = $("#canvas").height();
+		canvas = $("#canvas2d");
+		canvas.attr('width', parseInt(canvas.css('width')));
+		canvas.attr('height', parseInt(canvas.css('height')));
+		w = canvas.width();
+		h = canvas.height();
 		x0 = w/2;
 		y0 = h/2;
 

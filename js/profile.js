@@ -36,13 +36,11 @@ function canvas3d(){
 
 				container = $( '#canvas3d' );
 
-				var canvasWidth = container.innerWidth;
-				var canvasHeight = container.innerHeight;
-
+				var canvasWidth = container.width();
+				var canvasHeight = container.height();
+			
 				// CAMERA
-				width = container.innerWidth;
-				height = container.innerHeight;
-				camera = new THREE.PerspectiveCamera( 10, container.innerWidth / container.innerHeight, 1, 80000 );
+				camera = new THREE.PerspectiveCamera( 10, container.width() / container.height(), 1, 80000 );
 
 				camera.position.set( -600, 550, 1300 );
 
@@ -60,6 +58,8 @@ function canvas3d(){
 				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
 				container.append( renderer.domElement );
+
+
 
 				// EVENTS
 				container.resize( onWindowResize, false );
@@ -134,8 +134,8 @@ function canvas3d(){
 
 			function onWindowResize() {
 
-				var canvasWidth = container.innerWidth;
-				var canvasHeight = container.innerHeight;
+				var canvasWidth = container.width();
+				var canvasHeight = container.height();
 
 				renderer.setSize( canvasWidth, canvasHeight );
 
