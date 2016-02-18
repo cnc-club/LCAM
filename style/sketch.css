@@ -45,10 +45,12 @@
 #canvas2d{
 	height: 200px;
 	width: 200px;
+	float: left;
 }
 #canvas3d{
 	height: 400px;
 	width: 400px;
+	float: left;
 }
 
 

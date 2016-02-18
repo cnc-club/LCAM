@@ -49,12 +49,23 @@ function TString() {
 	
 	this.to_str = function (){
 		fields = {};
-		$("#theForm").find(":input").each(function() {
+		$(":input", this.root).each(function() {
 		    fields[this.attr('class')] = $(this).val();
 		});
-		return JSON.fields
-		
+		return JSON.stringify(fields);
 	}	
+
+	this.from_str = function (s){
+		fields = JSON.parse(s);
+		$(":input", this.root).each(function() {
+			if (fields[this.attr('class')] != undefined)
+			{
+		    	$(this).val(fields[this.attr('class')]);
+		    }	
+		});
+	}	
+
+
 
 	this.create = function() {
 		root = $("<div class='TString'><div>");
@@ -134,6 +145,11 @@ function TString() {
 var end_of_input;
 
 function Sketch(){
+
+
+	this.to_str = function(){
+		
+	}
 
 	this.create = function(){ 
 		this.root = $(
