@@ -20,6 +20,10 @@ function Line(st,end) {
 		this.createFrom(st,end);
 	}
 	this.createFrom(st,end);
+	
+	this.draw3d = function() {
+		return [this.st,this.end];
+	}
 
 };
 

@@ -188,6 +188,15 @@ function Canvas3d(){
 
 	}
 	
+	this.draw = function (shape) {
+		points = []
+		for (num=0; num<shape.length; num++)
+		{
+			points.push( shape[num].draw3d() );
+		}
+		
+	}
+	
 				
 }			
 

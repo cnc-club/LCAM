@@ -105,7 +105,7 @@ function Canvas3d(){
 		var h;
 
 		var gui = new dat.GUI({ autoPlace: false, closed: true });
-		
+		gui.close();
 		// material (attributes)
 		h = gui.add( effectController, "newTess", [ 6, 8, 10, 15, 20, 30, 40, 50 ] ).name( "Tessellation Level" ).onChange( render_func );
 		h = gui.add( effectController, "newShading", [ "wireframe", "flat", "smooth", "glossy" ] ).name( "Shading" ).onChange( render_func );
@@ -186,6 +186,16 @@ function Canvas3d(){
 		var gridHelper = new THREE.GridHelper( size, step, "Y" );
 		this.scene.add( gridHelper );
 
+	}
+	
+	this.draw = function (shape) {
+		points = []
+		for (num=0; num<shape.length; num++)
+		{
+			points.push( shape[num].draw3d() );
+			console.log( points );
+		}
+		
 	}
 	
 				

@@ -45,12 +45,20 @@ function TString() {
 			$(sk).append(s.create());
 			$(".TString ."+cl, sk).last().focus();
 		}		
-		
 	}
+	
+	this.to_str = function (){
+		fields = {};
+		$("#theForm").find(":input").each(function() {
+		    fields[this.attr('class')] = $(this).val();
+		});
+		return JSON.fields
+		
+	}	
 
 	this.create = function() {
 		root = $("<div class='TString'><div>");
-		root.append("	<input type='text' class='x'>");
+		root.append("<input type='text' class='x'>");
 		root.append("<input type='text' class='z'>");
 		root.append("<input type='text' class='chamfer'>");
 		root.append("<input type='checkbox' class='arc'>");
@@ -120,6 +128,7 @@ function TString() {
 		return root;
 	}
 
+	
 };
 
 var end_of_input;
@@ -153,6 +162,7 @@ function Sketch(){
 		this.array_value = result; 
 		this.get_shape();
 		this.draw2d();
+		this.draw3d();
 	}
 
 	this.process_str = function(s){
@@ -217,7 +227,6 @@ function Sketch(){
 				}
 
 		}
-		console.log(this.shape);
 
 	}
 
@@ -272,12 +281,15 @@ function Sketch(){
 
 		for (num=0; num<this.shape.length; num++)
 			{
-				console.log(this.shape[num]);
 				this.shape[num].draw(context,x0,y0);
 			}
 		context.lineWidth = 2;
 		context.strokeStyle="#590";			
 		context.stroke();
+	}
+
+	this.draw3d = function (){
+		canvas3d.draw(this.shape);
 	}
 
 }
