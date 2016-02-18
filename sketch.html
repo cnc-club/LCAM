@@ -30,31 +30,40 @@
 <div id="sketch-container">
 </div>
 
-
-<script>
-	sketch = new Sketch();
-	s = sketch.create();
-	$("#sketch-container").append(s);
-</script>
-
-
-
 <canvas id="canvas2d">
     This text is displayed if your browser does not support HTML5 Canvas.
 </canvas>
 <div id="canvas3d">
-   
 </div>
 
-
 <script>
-canvas3d = new Canvas3d();
-canvas3d.init();
+	canvas3d = new Canvas3d();
+	canvas3d.init();
 
+	sketch = new Sketch();
+	s = sketch.create();
+	$("#sketch-container").append(s);
+
+	a = ["{\"x\":\"10\",\"z\":\"\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"20\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d10\",\"z\":\"\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"-20\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d20\",\"z\":\"\",\"chamfer\":\"\",\"arc\":true,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"15\",\"ccw\":true}"];
+	a = JSON.stringify(a);
+	sketch.from_str(a);
+	sketch.update();	
+	
 </script>
 
 
 
+
+
+
+<script>
+
+
+</script>
+
+
+<input type='button' style="float:right" onclick='$("body").append("<div>"+sketch.to_str()+"</div>")'>
+<input type='button' style="float:right" onclick='console.log(sketch.from_str())'>
 
 
 

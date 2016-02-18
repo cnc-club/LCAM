@@ -50,32 +50,6 @@ function TString() {
 		}		
 	}
 	
-	this.to_str = function (){
-		fields = {};
-		$(":input", this.root).each(function() {
-		    fields[this.attr('class')] = $(this).val();
-		});
-		return JSON.stringify(fields);
-	}	
-
-	this.from_str = function (s){
-		fields = JSON.parse(s);
-		$(":input", this.root).each(function() {
-			if (fields[this.attr('class')] != undefined)
-			{
-		    	$(this).val(fields[this.attr('class')]);
-		    }	
-		});
-	}	
-	
-	this.el_to_str = function(el){
-		fields = {};
-		$(":input", el).each(function() {
-		    fields[$(this).attr('class')] = $(this).val();
-		});
-		return JSON.stringify(fields);
-	}
-	
 
 	this.create = function() {
 		root = $("<div class='TString'><div>");
@@ -149,8 +123,6 @@ function TString() {
 
 		return root;
 	}
-
-	
 };
 
 var end_of_input;
@@ -161,8 +133,9 @@ function Sketch(){
 	this.to_str = function(){
 		arr = [];
 		ts = new TString;
+		sk = this;
 		$(".TString",this.root).each( function(){
-				arr.push(ts.el_to_str(this));
+				arr.push(sk.tstr_to_str(this));
 			}
 		);
 		return JSON.stringify(arr);
@@ -170,11 +143,52 @@ function Sketch(){
 
 	this.from_str = function(s){
 		arr = JSON.parse(s);
-		$(arr).each( function (){
-			console.log(this);
-		});
+		$(this.root).empty();
+		for (i=0; i<arr.length; i++) {
+			console.log(arr[i]);
+			st = this.tstr_from_str(arr[i]);
+			console.log(st);
+			this.root.append(st.root);
+		}
 	}
 
+
+	this.tstr_to_str = function (el){
+		fields = {};
+		$(":input", el).each(function() {
+			console.log($(this));
+			if ($(this).attr("type") == "checkbox"){
+				console.log($(this).checked);
+			    fields[$(this).attr('class')] = $(this)[0].checked;
+			}
+			else 
+			{
+				fields[$(this).attr('class')] = $(this).val();
+			}
+		});
+		return JSON.stringify(fields);
+	}	
+
+	this.tstr_from_str = function (s){
+		fields = JSON.parse(s);
+		st = new TString;
+		st.create();
+		$(":input", st.root).each(function() {
+			if (fields[$(this).attr('class')] != undefined)
+			{
+			   if ($(this).attr("type") == "checkbox" && fields[$(this).attr('class')]){
+					console.log($(this).checked);
+					$(this)[0].checked = 1;
+				}
+				else 
+				{
+					$(this).val(fields[$(this).attr('class')]);
+				}
+		    }	
+		});
+		return st;
+	}	
+	
 
 	this.create = function(){ 
 		this.root = $(
