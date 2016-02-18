@@ -15,6 +15,9 @@ function TString() {
 	this.start_z = 0;
 	this.end_x = 0;
 	this.end_z = 0;
+	
+	this.dom_element = undefined;
+
 
 	function focus_next(el){
 		var root = $(el).closest(".TString");
@@ -64,11 +67,19 @@ function TString() {
 		    }	
 		});
 	}	
-
-
+	
+	this.el_to_str = function(el){
+		fields = {};
+		$(":input", el).each(function() {
+		    fields[$(this).attr('class')] = $(this).val();
+		});
+		return JSON.stringify(fields);
+	}
+	
 
 	this.create = function() {
 		root = $("<div class='TString'><div>");
+		root.TString = this;
 		root.append("<input type='text' class='x'>");
 		root.append("<input type='text' class='z'>");
 		root.append("<input type='text' class='chamfer'>");
@@ -148,8 +159,27 @@ function Sketch(){
 
 
 	this.to_str = function(){
-		
+		arr = [];
+		ts = new TString;
+		$(".TString",this.root).each( function(){
+				arr.push(ts.el_to_str(this));
+			}
+		);
+		return JSON.stringify(arr);
 	}
+
+	this.from_str = function(s){
+		arr = JSON.parse(s);
+		$(this.root).empty();
+		sk = this;
+		$(arr).each( function (){
+		s = new TString();
+		s.create();
+		s.from_str(this)
+		sk.root.append(s.root);
+		});
+	}
+
 
 	this.create = function(){ 
 		this.root = $(
