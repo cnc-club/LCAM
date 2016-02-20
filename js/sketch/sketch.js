@@ -144,10 +144,8 @@ function Sketch(){
 	this.from_str = function(s){
 		arr = JSON.parse(s);
 		$(this.root).empty();
-		for (i=0; i<arr.length; i++) {
-			console.log(arr[i]);
+		for (var i=0; i<arr.length; i++) {
 			st = this.tstr_from_str(arr[i]);
-			console.log(st);
 			this.root.append(st.root);
 		}
 	}
@@ -169,7 +167,7 @@ function Sketch(){
 		return JSON.stringify(fields);
 	}	
 
-	this.tstr_from_str = function (s){
+	this.tstr_from_str =  function (s){
 		fields = JSON.parse(s);
 		st = new TString;
 		st.create();
@@ -188,6 +186,14 @@ function Sketch(){
 		});
 		return st;
 	}	
+	
+	this.to_points = function(tess) {
+		p = []
+		for (var i=0;i<this.shape.length;i++){
+			p.concat(this.shape[i].draw3d());
+		}
+		return p;
+	} 
 	
 
 	this.create = function(){ 
@@ -237,7 +243,7 @@ function Sketch(){
 		this.shape = [];
 		x = 0;
 		z = 0;  	
-		for (num=0; num<this.array_value.length; num++)
+		for (var num=0; num<this.array_value.length; num++)
 		{
 				st = this.array_value[num];
 				xl = x;
@@ -297,7 +303,7 @@ function Sketch(){
 		context.strokeStyle="#aa0000";	
 		context.stroke();	
 		
-		for (i=0; i<=w/size; i++){
+		for (var i=0; i<=w/size; i++){
 			x = (x0%size) + i*size;
 			context.moveTo(x,0);
 			context.lineTo(x,h);
@@ -334,7 +340,7 @@ function Sketch(){
 		context.beginPath();
 		context.moveTo(x0,y0);
 
-		for (num=0; num<this.shape.length; num++)
+		for (var num=0; num<this.shape.length; num++)
 			{
 				this.shape[num].draw(context,x0,y0);
 			}
@@ -343,9 +349,33 @@ function Sketch(){
 		context.stroke();
 	}
 
-	this.draw3d = function (){
-		canvas3d.draw(this.shape);
+	this.to_three = function(p) {
+		P = []
+		for (var i=0;i<p.length;i++)
+		{
+			P.push( new THREE.Vector2( p[i].x, p[i].y) );
+		}
+		return P;
 	}
+	
+	this.draw3d = function (){
+		tess = canvas3d.tess;
+		if (this.obj == undefined) {
+			this.obj = new Obj();
+			this.obj.id = "sketch";
+		}
+		console.log(tess);
+		p = this.to_points(tess);
+		this.obj.geometry = new THREE.LatheGeometry( this.to_three(p), tess );
+	
+		console.log(tess);
+		canvas3d.update_obj(this.obj);
+		console.log(tess);
+		canvas3d.render(true);
+		console.log(canvas3d);
+		
+	}
+	
 
 }
 

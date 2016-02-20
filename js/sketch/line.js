@@ -1,11 +1,13 @@
 
 function Line(st,end) {
 
+	this.clone = function(){
+		return new Line(this.st,this.end);
+	}
 	
 	this.createFrom = function(st,end){
 		this.st = st.clone();
 		this.end = end.clone();
-		console.log(this.end)
 	}
 		
 	this.draw = function (context,x0,y0) {
@@ -24,6 +26,7 @@ function Line(st,end) {
 	this.draw3d = function() {
 		return [this.st,this.end];
 	}
+
 
 };
 

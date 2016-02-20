@@ -1,7 +1,11 @@
 
+function Obj() {
+	this.id = "";
+}
+
 function Canvas3d(){
 	if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
+	this.obj_list = {};
 	this.tess = -1;	// force initialization
 
 	// allocate these just once
@@ -121,57 +125,71 @@ function Canvas3d(){
 		this.render();
 	}.bind(this)
 	
-	this.render = function() {
+	this.update_scene = function(){
+		console.log ("123",this.obj_list);
+		for (var key in this.obj_list)
+			{
+				console.log(this.obj_list[key]);
+				this.update_obj(this/obj_list[key]);
+			}
+	}
+	
+	this.render = function(update) {
 		if ( effectController.newTess !== this.tess ||
 			effectController.newShading !== this.shading ||
-			effectController.newEdgesHelper !== this.edgesHelper
+			effectController.newEdgesHelper !== this.edgesHelper || 
+			update
 			 )
 		{
 			this.tess = effectController.newTess;
 			this.shading = effectController.newShading;
 			this.edgesHelper = effectController.newEdgesHelper;
-			this.createScene();
+			this.update_scene();
+			console.log(this,"<-Render");
+			console.log("!!!");
 		}
-
 		this.renderer.autoClear = true;
 		this.renderer.render( this.scene, this.camera );
 	}
-
-	this.createScene = function() {
-
-		if ( this.obj !== undefined ) {
-
-			this.obj.geometry.dispose();
-			this.scene.remove( this.obj );
+	
+	this.add_obj = function(obj) {
+		if (this.obj_list[obj.id] == undefined){
+			this.obj_list[obj.id] = obj;
+			o = this.obj_list[obj.id]
+		} else {
+			o = this.obj_list[obj.id]
+			o.mesh.geometry.dispose();
+			this.scene.remove( o.mesh );			
 		}
-
-		var points = [];
-		for ( var i = 0; i < 10; i ++ ) {
-			points.push( new THREE.Vector2( Math.random() * 15 + 50, ( i - 5 ) * 2 ) );
-		}
-		var geometry = new THREE.LatheGeometry( points, this.tess );
-
-		this.obj = new THREE.Mesh(
-			geometry,
+		console.log(this, "<-add")
+		o.mesh = new THREE.Mesh(
+			o.geometry,
 			this.shading === "wireframe" ? this.wireMaterial : (
 			this.shading === "flat" ? this.flatMaterial : (
 			this.shading === "smooth" ? this.gouraudMaterial : (
 			this.shading === "glossy" ? this.phongMaterial : this.phongMaterial
-								) ) ) );	// if no match, pick Phong
+								) ) ) );
+		console.log(this.scene, "<-add");
+		this.scene.add( o.mesh );
 
-		//scene.add( teapot );
-		this.scene.add( this.obj );
-
-		if ( this.edges != undefined){
-			this.edges.geometry.dispose();
-			this.scene.remove(this.edges);
+		if ( o.edges != undefined){
+			o.edges.geometry.dispose();
+			this.scene.remove( o.edges );
+			console.log("edges!!!")
+			o.edges = undefined;
 		}
 		if ( this.edgesHelper )
 		{
-			this.edges = new THREE.EdgesHelper( this.obj, 0xaa0000 );
-			this.scene.add( this.edges );
+			o.edges = new THREE.EdgesHelper( o.mesh, 0xaa0000 );
+			this.scene.add( o.edges );
+			console.log("edges!!!!!!!!!")
 		}
+		this.obj_list[obj.id] = o;
+		console.log(this.scene, "<-add")				
 	}
+	
+	this.update_obj = this.add_obj;
+
 			
 			
 	this.init_helpers = function() {
@@ -187,17 +205,6 @@ function Canvas3d(){
 		this.scene.add( gridHelper );
 
 	}
-	
-	this.draw = function (shape) {
-		points = []
-		for (num=0; num<shape.length; num++)
-		{
-			points.push( shape[num].draw3d() );
-			console.log( points );
-		}
-		
-	}
-	
 				
 }			
 

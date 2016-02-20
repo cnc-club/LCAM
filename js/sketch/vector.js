@@ -75,8 +75,13 @@ Vector.prototype = {
   cw: function() {
   	t = this.x; this.x = this.y; this.y = -t;
     return this;
+  },
+  rot: function(a) {
+	s = Math.sin(a);
+	c = Math.cos(a);
+	this.x = this.x * c - this.y * s;
+	this.y = this.x * s + this.y * c;
   }
-  
   
 };
 
