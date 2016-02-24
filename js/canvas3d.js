@@ -28,6 +28,7 @@ function Canvas3d(){
 		this.ambientLight = new THREE.AmbientLight( 0x333333 );	// 0.2
 
 		this.light = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
+		this.light.position.set( -1, 3, 0 );
 		// direction is set in GUI
 
 		// RENDERER
@@ -47,6 +48,7 @@ function Canvas3d(){
 		this.cameraControls.target.set( 0, 0, 0 );
 		this.cameraControls.addEventListener( 'change',
 												function() {
+													this.light.position.copy( this.camera.position );												
 													this.render();
 												}.bind(this)
 										);
@@ -126,15 +128,19 @@ function Canvas3d(){
 	}.bind(this)
 	
 	this.update_scene = function(){
-		console.log ("123",this.obj_list);
 		for (var key in this.obj_list)
 			{
-				console.log(this.obj_list[key]);
 				this.update_obj(this.obj_list[key]);
 			}
 	}
 	
 	this.render = function(update) {
+		if (effectController.newTess !== this.tess)
+		{
+			this.tess = effectController.newTess;
+			if (typeof sketch !="undefined"){sketch.draw3d();}
+			this.update_scene();
+		}		
 		if ( effectController.newTess !== this.tess ||
 			effectController.newShading !== this.shading ||
 			effectController.newEdgesHelper !== this.edgesHelper || 
@@ -145,8 +151,6 @@ function Canvas3d(){
 			this.shading = effectController.newShading;
 			this.edgesHelper = effectController.newEdgesHelper;
 			this.update_scene();
-			console.log(this,"<-Render");
-			console.log("!!!");
 		}
 		this.renderer.autoClear = true;
 		this.renderer.render( this.scene, this.camera );
@@ -158,34 +162,35 @@ function Canvas3d(){
 			o = this.obj_list[obj.id]
 		} else {
 			o = this.obj_list[obj.id]
-			o.mesh.geometry.dispose();
+			//o.mesh.geometry.dispose();
 			this.scene.remove( o.mesh );			
 		}
-		console.log(this, "<-add")
+		var c = Math.round(Math.random()*256*256*256)
+		wireMaterial = new THREE.MeshBasicMaterial( { color: c, wireframe: true } ) ;
+		flatMaterial = new THREE.MeshPhongMaterial( { color: c, specular: 0x0, shading: THREE.FlatShading, side: THREE.DoubleSide } );
+		gouraudMaterial = new THREE.MeshLambertMaterial( { color: c, side: THREE.DoubleSide } );
+		phongMaterial = new THREE.MeshPhongMaterial( { color: c, shading: THREE.SmoothShading, side: THREE.DoubleSide } );
+		
 		o.mesh = new THREE.Mesh(
 			o.geometry,
-			this.shading === "wireframe" ? this.wireMaterial : (
-			this.shading === "flat" ? this.flatMaterial : (
-			this.shading === "smooth" ? this.gouraudMaterial : (
-			this.shading === "glossy" ? this.phongMaterial : this.phongMaterial
+			this.shading === "wireframe" ? wireMaterial : (
+			this.shading === "flat" ? flatMaterial : (
+			this.shading === "smooth" ? gouraudMaterial : (
+			this.shading === "glossy" ? phongMaterial : phongMaterial
 								) ) ) );
-		console.log(this.scene, "<-add");
 		this.scene.add( o.mesh );
 
 		if ( o.edges != undefined){
 			o.edges.geometry.dispose();
 			this.scene.remove( o.edges );
-			console.log("edges!!!")
 			o.edges = undefined;
 		}
 		if ( this.edgesHelper )
 		{
 			o.edges = new THREE.EdgesHelper( o.mesh, 0xaa0000 );
 			this.scene.add( o.edges );
-			console.log("edges!!!!!!!!!")
 		}
 		this.obj_list[obj.id] = o;
-		console.log(this.scene, "<-add")				
 	}
 	
 	this.update_obj = this.add_obj;
@@ -193,17 +198,13 @@ function Canvas3d(){
 			
 			
 	this.init_helpers = function() {
-	
 		var axisHelper = new THREE.AxisHelper( 5 );
 		this.scene.add( axisHelper );
 
-
 		var size = 100;
 		var step = 1;
-
 		var gridHelper = new THREE.GridHelper( size, step, "Y" );
 		this.scene.add( gridHelper );
-
 	}
 				
 }			

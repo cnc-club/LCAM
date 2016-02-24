@@ -15,7 +15,7 @@ function TString() {
 	this.start_z = 0;
 	this.end_x = 0;
 	this.end_z = 0;
-	
+	this.obj = []	
 	this.dom_element = undefined;
 
 
@@ -175,7 +175,6 @@ function Sketch(){
 			if (fields[$(this).attr('class')] != undefined)
 			{
 			   if ($(this).attr("type") == "checkbox" && fields[$(this).attr('class')]){
-					console.log(fields[$(this).attr('class')]);
 					$(this)[0].checked = 1;
 				}
 				else 
@@ -186,15 +185,7 @@ function Sketch(){
 		});
 		return st;
 	}	
-	
-	this.to_points = function(tess) {
-		p = []
-		for (var i=0;i<this.shape.length;i++){
-			p.concat(this.shape[i].draw3d());
-		}
-		return p;
-	} 
-	
+
 
 	this.create = function(){ 
 		this.root = $(
@@ -227,6 +218,7 @@ function Sketch(){
 	}
 
 	this.process_str = function(s){
+		if (s == undefined) {return undefined;} 
 		s = s.replace(/u/gi,"X+");
 		s = s.replace(/w/gi,"Z+");
 		s = s.replace(/x/gi,x);
@@ -234,7 +226,8 @@ function Sketch(){
 		s = s.replace(/d/gi,"2*");
 		s = s.replace(/\+\-/gi,"-");
 		s = s.replace(/2\*\-/gi,"(-2)*");
-		//console.log(s)				
+		//console.log(s)	
+		s = s.replace(/[^-0-9+\(\)*\/]/g,"");		
 		s = eval(s)
 		return s
 	}
@@ -242,7 +235,8 @@ function Sketch(){
 	this.get_shape = function (){
 		this.shape = [];
 		x = 0;
-		z = 0;  	
+		z = 0;  
+		var s;	
 		for (var num=0; num<this.array_value.length; num++)
 		{
 				st = this.array_value[num];
@@ -286,6 +280,42 @@ function Sketch(){
 				{
 					this.shape.push(  new Line(new Vector(xl,zl), new Vector(x,z))   );
 				}
+				
+				var ch = st[2]; 
+				if (ch!="" & this.shape.length>1){
+				
+					if ( ch.toUpperCase().indexOf("R") >0 ) { // it's an arc
+					}
+					else { // chamfer
+					
+						var v = this.process_str(ch.split("X")[0]);
+						var a = this.process_str(ch.split("X")[1]);
+						var l1 = v;
+						var l2 = v;
+						if (a!=undefined){
+						
+						}
+						
+						var p1 = this.shape[this.shape.length-2]; 
+						var p2 = this.shape[this.shape.length-1]; 
+						if (l1<=p1.l() & l2<=p2.l())
+						{	
+							var l = p1.l() 
+							p1.mul((l-l1)/l);
+							l = p2.l() 				
+							console.log(l2,(l-l2)/l,l)			
+							p2.rev().mul((l-l2)/l).rev();		
+							this.shape.push(p2);
+							this.shape[this.shape.length-2] = new Line(p1.end,p2.st);	
+							
+						}
+							
+			
+					}				
+
+				}
+				console.log(this.shape);
+				
 
 		}
 
@@ -350,7 +380,7 @@ function Sketch(){
 	}
 
 	this.to_three = function(p) {
-		P = []
+		var P = []
 		for (var i=0;i<p.length;i++)
 		{
 			P.push( new THREE.Vector2( p[i].x, p[i].y) );
@@ -358,21 +388,36 @@ function Sketch(){
 		return P;
 	}
 	
+	
+	this.to_points = function(tess) {
+		var p = []
+		for (var i=0;i<this.shape.length;i++){
+			p1 = this.shape[i].draw3d(tess);
+//			if (p.length>0 && p[p.length-1].equals(p1[0])) {p.pop()}
+			p = p.concat([p1]);
+		}
+		return p;
+	} 
+		
+	
 	this.draw3d = function (){
 		tess = canvas3d.tess;
 		if (this.obj == undefined) {
 			this.obj = new Obj();
 			this.obj.id = "sketch";
 		}
-		console.log(tess);
-		p = this.to_points(tess);
-		this.obj.geometry = new THREE.LatheGeometry( this.to_three(p), tess );
-	
-		console.log(tess);
-		canvas3d.update_obj(this.obj);
-		console.log(tess);
-		canvas3d.render(update = true);
-		console.log(canvas3d);
+		
+		var p = this.to_points(tess);
+		for (var i=0; i<p.length; i++)
+		{		
+			if (this.obj[i] == undefined )
+				 {this.obj[i] = new Obj();}
+			this.obj[i].id = "sketch"+i;
+			
+			this.obj[i].geometry = new THREE.LatheGeometry( this.to_three(p[i]), tess );
+			canvas3d.update_obj(this.obj[i]);
+		}
+		canvas3d.render(true);
 		
 	}
 	

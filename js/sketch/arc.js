@@ -3,8 +3,19 @@ function Arc(st,end,c,ccw) {
 	this.st = new Vector(0,0);
 	this.end = new Vector(0,0);
 	this.c  = new Vector(0,0);;
+	this.a = 0;
 	this.ccw = false;
 	this.r = 0;
+
+	this.get_angle = function(){
+		var a = this.end.clone().subtract(this.c).angle() - this.st.clone().subtract(this.c).angle();
+		a = a%(2*Math.PI);
+		if (a<0){ a+= 2*Math.PI;}
+		if (this.ccw){
+			a -= 2*Math.PI
+		} 
+		this.a = -a;		
+	}
 
 	this.createFrom = function(st,end,c,ccw){
 		this.st = st.clone();
@@ -21,6 +32,8 @@ function Arc(st,end,c,ccw) {
 			this.c = p3.clone().add(p4).add(st);
 		}	
 		this.ccw = ccw;
+		this.get_angle();
+	
 	}
 	
 	this.draw = function (context,x0,y0) {
@@ -32,16 +45,17 @@ function Arc(st,end,c,ccw) {
 	
 
 	this.draw3d = function (tess) {
-		p = [this.st]
-		ast = Math.atan2(st);
-		a = Math.atan2(end)-Math.atan2(st);
-		for (var i=0;i<tess;i++)
+		var points = [this.st.clone()]
+		var ast = st.clone().subtract(this.c).angle();
+		for (var i=0;i<tess-1;i++)
 		{
-			p = this.st.clone()
-			p = p.subtract(this.c).rot(ast+a/tess*(i+1)).add(this.c);
-			p.push(p);
+			var p = this.st.clone();
+			p = p.subtract(this.c).rot(this.a/tess*(i+1)).add(this.c);
+			points.push(p);
 		}
-		return p
+		points.push(this.end.clone())
+		console.log("arc", points, tess)
+		return points
 	}
 
 	this.create = function(st,end,c,ccw) {

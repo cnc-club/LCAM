@@ -77,10 +77,12 @@ Vector.prototype = {
     return this;
   },
   rot: function(a) {
-	s = Math.sin(a);
-	c = Math.cos(a);
-	this.x = this.x * c - this.y * s;
+	var s = Math.sin(a);
+	var c = Math.cos(a);
+	var x = this.x * c - this.y * s;
 	this.y = this.x * s + this.y * c;
+	this.x = x;
+	return this;
   }
   
 };

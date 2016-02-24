@@ -15,6 +15,15 @@ function Line(st,end) {
 		context.lineTo(this.end.y + x0, this.end.x + y0);
 	}
 	
+	this.l = function () {
+		return this.st.clone().subtract(this.end).l();
+	}
+
+	this.mul = function (a) {
+		this.end.x = (this.end.x-this.st.x)*a + this.st.x;
+		this.end.y = (this.end.y-this.st.y)*a + this.st.y;
+		return this;
+	}
 
 	this.create = function(st,end) {
 		// start - vector
@@ -27,6 +36,12 @@ function Line(st,end) {
 		return [this.st,this.end];
 	}
 
+	this.rev = function(){
+		var p = this.st;
+		this.st = this.end;
+		this.end = p;
+		return this;	
+	}
 
 };
 

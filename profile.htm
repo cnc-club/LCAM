@@ -385,7 +385,9 @@
 					points.push( new THREE.Vector2( Math.random() * 15 + 50, ( i - 5 ) * 2 ) );
 
 				}
+				console.log(points);
 				var geometry = new THREE.LatheGeometry( points, 32 );
+				console.log(geometry);
 				var material = new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.5 ,color: 0xffff00 } );
 				var lathe = new THREE.Mesh( geometry, phongMaterial );
 				scene.add( lathe );
