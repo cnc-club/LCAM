@@ -27,6 +27,8 @@
 <script src='js/lathe.js'></script>
 
 
+
+
 <div id="sketch-container">
 </div>
 
@@ -36,9 +38,12 @@
 <div id="canvas3d">
 </div>
 
+<textarea class="json"></textarea>
+<textarea class="shape"></textarea>
+
 <script>
-	canvas3d = new Canvas3d();
-	canvas3d.init();
+//	canvas3d = new Canvas3d();
+//	canvas3d.init();
 
 	sketch = new Sketch();
 	s = sketch.create();
@@ -48,6 +53,8 @@
 	a = JSON.stringify(a);
 	sketch.from_str(a);
 	sketch.update();	
+		
+	
 	
 </script>
 

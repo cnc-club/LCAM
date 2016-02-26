@@ -129,6 +129,9 @@ var end_of_input;
 
 function Sketch(){
 
+	this.shape_to_str = function() {
+		return JSON.stringify(this.shape);
+	}
 
 	this.to_str = function(){
 		arr = [];
@@ -213,8 +216,12 @@ function Sketch(){
 		});		
 		this.array_value = result; 
 		this.get_shape();
+		$("textarea.json").text(this.to_str());
+		$("textarea.shape").text(this.shape_to_str());
+
 		this.draw2d();
 		this.draw3d();
+		
 	}
 
 	this.process_str = function(s){
