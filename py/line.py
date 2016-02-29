@@ -14,6 +14,16 @@ class Line():
 			self.n = ((self.end-self.st)/self.l).ccw()
 		else: 
 			self.n = [0,1]
+
+	def allowance(self,x=None,y=None,r=None) :
+		#TODO radius allowance
+		if x!=None :
+			self.st.x += x
+			self.end.x += x
+		if y!=None :
+			self.st.y += y
+			self.end.y += y
+
 	
 	def get_t_at_point(self,p) :
 		if self.st.x-self.end.x != 0 :
@@ -53,7 +63,8 @@ class Line():
 	def draw(self, group=None, style=None, layer=None, transform=None, num = 0, reverse_angle = None, color = None, width=None) :
 		pass
 	
-	def intersect(self,b, false_intersection = False) :
+	def intersect(self,b, false_intersection = False, ray = False) :
+		# ray = return including false-self intersections 
 		if b.__class__ == Line :
 			if self.l < 10e-8 or b.l < 10e-8 : return []
 			v1 = self.end - self.st
@@ -65,7 +76,9 @@ class Line():
 
 				if (self.st.x-b.st.x)*v1.y - (self.st.y-b.st.y)*v1.x  == 0:
 					# lines are the same
-					if v1.x != 0 :
+					if ray : 
+						return [b.st,b.end]
+					elif v1.x != 0 :
 						if 0<=(self.st.x-b.st.x)/v2.x<=1 :  res.append(self.st)
 						if 0<=(self.end.x-b.st.x)/v2.x<=1 :  res.append(self.end)
 						if 0<=(b.st.x-self.st.x)/v1.x<=1 :  res.append(b.st)
@@ -80,7 +93,8 @@ class Line():
 				t1 = ( v2.x*(self.st.y-b.st.y) - v2.y*(self.st.x-b.st.x) ) / x
 				t2 = ( v1.x*(self.st.y-b.st.y) - v1.y*(self.st.x-b.st.x) ) / x
 				
-				if 0<=t1<=1 and 0<=t2<=1 or false_intersection : return [ self.st+v1*t1 ]	
+				if ray and 0<=t2<=1 : return  [ self.st+v1*t1 ]
+				elif 0<=t1<=1 and 0<=t2<=1 or false_intersection : return [ self.st+v1*t1 ]	
 				else : return []					
 		else: 
 			# taken from http://mathworld.wolfram.com/Circle-LineIntersection.html
@@ -94,18 +108,26 @@ class Line():
 			dr = dx*dx+dy*dy
 			descr = b.r**2*dr-D*D
 			if descr<0 : return []
-			if descr==0 : return self.check_intersection(b.check_intersection([ P([D*dy/dr+b.c.x,-D*dx/dr+b.c.y]) ]))
+			if descr==0 :
+				res = [ P([D*dy/dr+b.c.x,-D*dx/dr+b.c.y]) ]
+				if false_intersection :
+					return res
+				res = b.check_intersection(res)
+				if ray :
+					return res  
+				return self.check_intersection(res)
 			sign = -1. if dy<0 else 1.
 			descr = sqrt(descr)
-			points = [
+			res = [
 						 P( [ (D*dy+sign*dx*descr)/dr+b.c.x, (-D*dx+abs(dy)*descr)/dr+b.c.y ] ), 
 						 P( [ (D*dy-sign*dx*descr)/dr+b.c.x, (-D*dx-abs(dy)*descr)/dr+b.c.y ] )
 					]
 			if false_intersection :
-				return points
-			else: 
-				return self.check_intersection(b.check_intersection( points ))
-							
+				return res
+			res = b.check_intersection(res)
+			if ray :
+				return res  
+			return self.check_intersection(res)
 
 	def check_intersection(self, points):
 		res = []
