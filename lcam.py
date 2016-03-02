@@ -139,7 +139,7 @@ class Shape(Operation) :
 			done = True
 			r = Ray( P(self.stx, self.stz), P(self.stx,self.endz) )
 			points = r.intersect_geom(self.geom)
-			for
+			print points
 
 	
 
@@ -161,8 +161,14 @@ class Ray() :
 class Postprocessor() :
 	pass
 	
+	
+def run() :
+	s = Sketch()
+		
+	
 
 if __name__ == "__main__":
 	s = Sketch()
 	m = Shape()	
+	
 	print m.tool
