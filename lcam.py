@@ -99,7 +99,9 @@ class Operation() :
 		self.geometry = []
 		self.stock = Stock()
 		self.allowance = [0,0,0]
-
+		
+		self.param = {}
+		
 	def draw(self) :
 		for t in self.traj :
 			t.draw()
@@ -117,29 +119,45 @@ class Shape(Operation) :
 		self.startx = 20
 		self.safex = 50
 		self.endx = 0
+			
+		self.stx = self.param["maxx"] = 10
+		self.endx = self.param["minx"] = 0
+		self.stz = self.param["maxz"] = 0
+		self.endz = self.param["minz"] = -20 
+		self.safex = self.param["safex"] = -20 
+		self.step = 1
+	
+		
 	def prepare(self) :
 		pass
 	
 	
 	def run(self) :
 		done == False
-		x = self.startx - step
+		x = self.stx - step
 		while x>self.endx and not done:
 			done = True
+			r = Ray( P(self.stx, self.stz), P(self.stx,self.endz) )
+			points = r.intersect_geom(self.geom)
+			for
+
+	
+
+	
 			
 class Ray() :
 	def __init__(self, st, end) :
 		self.st = st.copy()
 		self.end = end.copy() 
-	def intersect_geom(self, geom) :
+	def intersect_geom(self, geom, true = True) :
 		self.l = Line(self.st,self.end)
+		r = []
 		for g in geom : 
-			self.intersect_g(g)	
+			r.append(self.intersect_g(g))
+		return r		
 	def intersect_g(self, g)
 		r = self.l.intersect(g,ray = True)
-		for p in r :
-			#TODO
-			
+			return r			
 class Postprocessor() :
 	pass
 	
