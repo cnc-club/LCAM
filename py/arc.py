@@ -1,5 +1,6 @@
 from points import P
 from math import *
+from line import *
 pi2 = pi*2
 
 class Arc():
@@ -21,6 +22,37 @@ class Arc():
 
 	def __repr__(self) :
 		return "Arc: s%s e%s c%s r%.2f a%.2f (l=%.3f) " % (self.st,self.end,self.c,self.r,self.a,self.length())
+
+
+	def clip(self, x,y,x1,y1):
+		t = []
+		t.append(self.get_t_at_x(x))
+		t.append(self.get_t_at_x(x1))
+		t.append(self.get_t_at_y(y))
+		t.append(self.get_t_at_y(y1))
+		t = [i for i in t if 0<i<1] 
+		t.sort()
+		t = [0] + t + [1]
+		t = [self.at_t(i) for i in t]
+		res = []
+		for i in range(len(t)-1):
+			res.append( Arc(t[i], t[i+1], self.c, self.a ) )
+		
+		def inside(p) :
+			return x<p.x<x1 and y<p.y<y1 
+		
+		res = [  a if (x<a.cp.x<x1 and y<a.cp.y<y1) else Line(a.st,a.end)  
+					for a in res ]
+		for l in res :
+			if l.__class__ == Line :
+				l.st.x = x1 if l.st.x>x1 else ( x if l.st.x<x else l.st.x) 
+				l.st.y = y1 if l.st.y>y1 else ( y if l.st.y<y else l.st.y) 
+				l.end.x = x1 if l.end.x>x1 else ( x if l.end.x<x else l.end.x) 
+				l.end.y = y1 if l.end.y>y1 else ( y if l.end.y<y else l.end.y) 
+			
+		res = [  a for a in res if a.__class__== Arc or a.l2>0 ]
+
+		return res
 
 	def allowance(self,x=None,y=None,r=None) :
 		#TODO radius allowance
@@ -45,18 +77,38 @@ class Arc():
 		if a==None: a=self.a
 		if r==None: r=self.r
 		self.__init__(st,end,c,a,r)
+	
+	def at_t(self, t) :
+		return (self.st-self.c).rot(self.a*t)+self.c
 
 	def get_t_at_point(self, p, y=None) :
 		if y!=None : p = P(p,y)
 		if not self.point_inside_angle(p) : return -1.
 		return abs( acos( (self.st-self.c).dot((p-self.c))/(self.r**2) )/pi ) # consuming all arcs les than 180 deg
 
+	def get_t_at_x(self,x) :
+		if self.r<abs(self.c.x-x) or self.a == 0 :
+			return []
+		y = sqrt( self.r**2 - (self.c.x-x)**2 )
+		a = [P(x-self.c.x,y).angle(), P(x-self.c.x,-y).angle() ] if y!=0 else [P(x-self.c.x,0).angle()]
+		s = (self.st-self.c).angle()
+		a = [ ( i-(self.st-self.c).angle() )/self.a for i in a]
+		return a
+			
+	def get_t_at_y(self,y) :
+		if self.r<abs(self.c.y-y) or self.a == 0 :
+			return []
+		x = sqrt( self.r**2 - (self.c.y-y)**2 )
+		a = [P(x,y-self.c.y).angle(), P(x,y-self.c.y).angle() ] if y!=0 else [P(0,y-self.c.y).angle()]
+		s = (self.st-self.c).angle()
+		a = [ ( i-(self.st-self.c).angle() )/self.a for i in a]
+		return a
 		
 	def point_inside_angle(self,p,y=None) :  # TODO need to be done faster! 
 		if y!=None : p = P(p,y)
 		if (p-self.c).l2() != self.r**2 :  # p is not on the arc, lets move it there
 			p = self.c+(p-self.c).unit()*self.r
-		warn( (self.cp-self.c).dot(p-self.c),self.r**2, (self.cp-self.c).dot(p-self.c)/self.r**2)
+		#warn( (self.cp-self.c).dot(p-self.c),self.r**2, (self.cp-self.c).dot(p-self.c)/self.r**2)
 		try:
 			abs(  acos( (self.cp-self.c).dot(p-self.c) /self.r**2  )  )  <  abs(self.a/2)
 		except :

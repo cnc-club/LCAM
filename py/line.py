@@ -24,12 +24,54 @@ class Line():
 			self.st.y += y
 			self.end.y += y
 
+	def clip(self, x,y,x1,y1) :
+		t = []
+		t.append(self.get_t_at_x(x))
+		t.append(self.get_t_at_x(x1))
+		t.append(self.get_t_at_y(y))
+		t.append(self.get_t_at_y(y1))
+		t = [i for i in t if 0<i<1] 
+		t.sort()
+		t = [0] + t + [1]
+		t = [self.at_t(i) for i in t]
+		res = []
+		for i in range(len(t)-1):
+			res.append(Line(t[i],t[i+1]))
+		
+		# now we have all lines splitted by # x,y - x1,y1	
+		for l in res :	
+			l.st.x = x1 if l.st.x>x1 else ( x if l.st.x<x else l.st.x) 
+			l.st.y = y1 if l.st.y>y1 else ( y if l.st.y<y else l.st.y) 
+			l.end.x = x1 if l.end.x>x1 else ( x if l.end.x<x else l.end.x) 
+			l.end.y = y1 if l.end.y>y1 else ( y if l.end.y<y else l.end.y) 
+		res = [l for l in res if l.l2()>0]	
+		return res 
+
+
+
+	def at_t(self,t) :
+		return self.end*t + self.st*(1-t)
 	
 	def get_t_at_point(self,p) :
 		if self.st.x-self.end.x != 0 :
 			return (self.st.x-p.x)/(self.st.x-self.end.x)
-		else :
+		elif self.st.y-self.end.y != 0 :
 			return (self.st.y-p.y)/(self.st.y-self.end.y)
+		else :
+			return 0.	
+	
+	def get_t_at_x(self, x) :
+		if self.st.x-self.end.x != 0 :
+			(self.st.x-x)/(self.st.x-self.end.x)
+		else : 
+			return 0.
+			
+	def get_t_at_y(self, y) :
+		if self.st.y-self.end.y != 0 :
+			return (self.st.y-y)/(self.st.y-self.end.y)
+		else : 
+			return 0.
+			
 			
 	def __repr__(self) :
 		return "Line: %s %s (l=%.3f) " % (self.st,self.end,self.l)
