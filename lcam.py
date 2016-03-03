@@ -22,7 +22,7 @@ class Sketch() :
 				self.shape.append( Arc( P(el["st"]), P(el["end"]), P(el["c"]), (1 if el["ccw"] else -1)  ) )
 			else : 	
 				self.shape.append( Line( P(el["st"]), P(el["end"]) ) )
-				http://toblerity.org/shapely/manual.html
+				#http://toblerity.org/shapely/manual.html
 			
 		print self.shape		
 
