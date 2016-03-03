@@ -22,6 +22,19 @@ class Arc():
 	def __repr__(self) :
 		return "Arc: s%s e%s c%s r%.2f a%.2f (l=%.3f) " % (self.st,self.end,self.c,self.r,self.a,self.length())
 
+	def allowance(self,x=None,y=None,r=None) :
+		#TODO radius allowance
+		if x!=None :
+			self.st.x += x
+			self.end.x += x
+			self.c.x += x
+			self.cp.x += x
+		if y!=None :
+			self.st.y+= y
+			self.end.y += y
+			self.c.y += y
+			self.cp.y += y
+
 	def copy(self) :
 		return Arc(self.st,self.end,self.c,self.a,self.r)	
 
