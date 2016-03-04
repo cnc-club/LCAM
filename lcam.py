@@ -285,12 +285,12 @@ class Operation() :
 class ShapeContour(Operation) : 
 	def init(self) :
 		self.param = {}
-		self.stx = self.param["maxx"] = 600
-		self.endx = self.param["minx"] = -600
-		self.stz = self.param["maxz"] = 200
-		self.endz = self.param["minz"] = -200 
+		self.stx = self.param["maxx"] = 10
+		self.endx = self.param["minx"] = -5
+		self.stz = self.param["maxz"] = 5
+		self.endz = self.param["minz"] = -20 
 		self.safex = self.param["safex"] = 100 
-		self.steps = self.param["steps"] = 1 
+		self.steps = self.param["steps"] = 10 
 		self.step = self.param["step"] = .1 
 
 		self.direction = self.param["direction"] = -135 
@@ -319,8 +319,11 @@ class ShapeContour(Operation) :
 			self.traj.feed_in(p.x, p.y)	
 
 			for e in geom.g : 
+				
 				if e.__class__ == Line :
-					self.traj.feed(e.st,e.end)
+					print e
+					self.traj.feed(e.end)
+					print self
 				elif e.__class__ == Arc :
 					self.traj.arc(e)
 			
@@ -328,7 +331,10 @@ class ShapeContour(Operation) :
 			
 			self.traj.feed_out(self.stx, None)
 			self.traj.rapid(self.safex)
-
+			#self.traj.feed_out(self.stx,self.stz)
+			#self.traj.feed_out(self.stx,self.endz)
+			#self.traj.feed_out(self.endx,self.endz)
+			#self.traj.feed_out(self.endx,self.stz)
 		
 class ShapeRough(Operation) :
 	def init(self) :
