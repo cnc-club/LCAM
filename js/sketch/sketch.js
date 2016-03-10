@@ -230,11 +230,11 @@ function Sketch(){
 		s = s.replace(/w/gi,"Z+");
 		s = s.replace(/x/gi,x);
 		s = s.replace(/z/gi,z);
-		s = s.replace(/d/gi,"2*");
+		s = s.replace(/d/gi,"0.5*");
 		s = s.replace(/\+\-/gi,"-");
 		s = s.replace(/2\*\-/gi,"(-2)*");
 		//console.log(s)	
-		s = s.replace(/[^-0-9+\(\)*\/]/g,"");		
+		s = s.replace(/[^-0-9+\(\)*\/\.]/g,"");		
 		s = eval(s)
 		return s
 	}

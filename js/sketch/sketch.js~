@@ -129,6 +129,9 @@ var end_of_input;
 
 function Sketch(){
 
+	this.shape_to_str = function() {
+		return JSON.stringify(this.shape);
+	}
 
 	this.to_str = function(){
 		arr = [];
@@ -213,8 +216,12 @@ function Sketch(){
 		});		
 		this.array_value = result; 
 		this.get_shape();
+		$("textarea.json").text(this.to_str());
+		$("textarea.shape").text(this.shape_to_str());
+
 		this.draw2d();
 		this.draw3d();
+		
 	}
 
 	this.process_str = function(s){
@@ -227,7 +234,7 @@ function Sketch(){
 		s = s.replace(/\+\-/gi,"-");
 		s = s.replace(/2\*\-/gi,"(-2)*");
 		//console.log(s)	
-		s = s.replace(/[^-0-9+\(\)*\/]/g,"");		
+		s = s.replace(/[^-0-9+\(\)*\/\.]/g,"");		
 		s = eval(s)
 		return s
 	}
@@ -418,7 +425,6 @@ function Sketch(){
 			canvas3d.update_obj(this.obj[i]);
 		}
 		canvas3d.render(true);
-		
 	}
 	
 

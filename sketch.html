@@ -42,14 +42,15 @@
 <textarea class="shape"></textarea>
 
 <script>
-//	canvas3d = new Canvas3d();
-//	canvas3d.init();
+	canvas3d = new Canvas3d();
+	canvas3d.init();
 
 	sketch = new Sketch();
 	s = sketch.create();
 	$("#sketch-container").append(s);
 
-	a = ["{\"x\":\"10\",\"z\":\"\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"20\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d10\",\"z\":\"\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"-20\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d20\",\"z\":\"\",\"chamfer\":\"\",\"arc\":true,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"15\",\"ccw\":true}"];
+	a = ["{\"x\":\"1\",\"z\":\"-.5\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d2.5\",\"z\":\"-2\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"z-1.5\",\"chamfer\":\"\",\"arc\":true,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"4\",\"ccw\":true}","{\"x\":\"\",\"z\":\"z-2\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"z-1.5\",\"chamfer\":\"\",\"arc\":true,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"4\",\"ccw\":true}","{\"x\":\"\",\"z\":\"-9\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d5\",\"z\":\"-11\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"-13\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"d4\",\"z\":\"\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}","{\"x\":\"\",\"z\":\"-20\",\"chamfer\":\"\",\"arc\":false,\"add\":\"+\",\"del\":\"-\",\"i\":\"\",\"k\":\"\",\"r\":\"\",\"ccw\":false}"]
+
 	a = JSON.stringify(a);
 	sketch.from_str(a);
 	sketch.update();	
