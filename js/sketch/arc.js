@@ -28,8 +28,20 @@ function Arc(st,end,c,ccw) {
 			this.r = c;
 			p3 = end.clone().subtract(st).divide(2);
 			l = Math.sqrt(this.r*this.r-p3.l2());
-			p4 = p3.clone().ccw().unit().multiply(l);
-			this.c = p3.clone().add(p4).add(st);
+			if (ccw) 
+			{
+				p4 = p3.clone().ccw().unit().multiply(l);
+			}
+			else 
+			{
+								p4 = p3.clone().ccw().unit().multiply(-l);
+			}				
+			c = p3.clone().add(p4).add(st);
+//			if (this.end.clone().subtract(c).angle() -this.st.clone().subtract(c).angle() >	 Math.Pi) 
+//			{	
+//				c = p3.clone().subtract(p4).add(st);
+//			}
+			this.c = c;
 		}	
 		this.ccw = ccw;
 		this.get_angle();
